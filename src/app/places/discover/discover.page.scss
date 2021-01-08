@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+div {
+  font-family: "Times New Roman", Times, serif;
+}
+
+.p1 {
+  margin-top: 2px;
+  margin-bottom: 0px;
+  font-size: large;
+  font-weight: 700;
+}
+
+.p2 {
+  margin-top: 6px;
+}
+
+.bold {
+  font-weight: 1000;
+  margin-bottom: 0px;
+  margin-top: 12px;
+  font-size: 23px;
+}
+
+img {
+  width: 90px;
+  height: 80px;
+  border-radius: 9px;
+  margin: 7px;
+}
+.container2 {
+  flex: 1;
+}
+.icon-style {
+  margin: 7px;
+  font-size: 23px;
+}

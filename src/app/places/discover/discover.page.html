@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Discover Places</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" class="ion-text-center">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title> {{ loadedPlaces[0].title }} </ion-card-title>
+            <ion-card-subtitle>
+              {{ loadedPlaces[0].price | currency }} / Night
+            </ion-card-subtitle>
+          </ion-card-header>
+          <ion-img [src]="loadedPlaces[0].imageUrl"></ion-img>
+          <ion-card-content>
+            <p>{{ loadedPlaces[0].description }}</p>
+          </ion-card-content>
+          <div class="ion-text-right">
+            <ion-button
+              fill="clear"
+              color="primary"
+              [routerLink]="['/','places','tabs','discover','loadedPlaces[0].id']"
+              >More</ion-button
+            >
+          </div>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item
+            *ngFor="let places of loadedPlaces.slice(1)"
+            [routerLink]="['/','places','tabs','discover','places.id']"
+            detail="true"
+          >
+            <ion-thumbnail slot="start">
+              <ion-img [src]="places.imageUrl"></ion-img>
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ places.title }}</h2>
+              <p>{{ places.description }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<!-- <div class="container">
+    <div>
+      <img [src]="loadedPlaces[0].imageUrl" />
+    </div>
+    <div class="container2">
+      <h2 class="bold">{{ loadedPlaces[0].title }}</h2>
+      <p class="p1">{{ loadedPlaces[0].description }}</p>
+      <p class="p2">Reviews of all the persons</p>
+    </div>
+    <div class="icon-style">
+      <ion-icon name="heart-outline"></ion-icon>
+    </div>
+  </div> -->
+<!-- <div class="container">
+    <div>
+      <img src="assets/images/karachi.jpg" alt="" />
+    </div>
+    <div class="container2">
+      <h2 class="bold">Kate's Kitchen</h2>
+      <p class="p1">London, United Kingdom</p>
+      <p class="p2">Reviews of all the persons</p>
+    </div>
+    <div class="icon-style">
+      <ion-icon name="heart-outline"></ion-icon>
+    </div>
+  </div>
+  <div class="container">
+    <div>
+      <img src="assets/images/karachi.jpg" alt="" />
+    </div>
+    <div class="container2">
+      <h2 class="bold">Kate's Kitchen</h2>
+      <p class="p1">London, United Kingdom</p>
+      <p class="p2">Reviews of all the persons</p>
+    </div>
+    <div class="icon-style">
+      <ion-icon name="heart-outline"></ion-icon>
+    </div>
+  </div> -->

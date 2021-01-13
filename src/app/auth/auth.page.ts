@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
-import { LoadingController } from "@ionic/angular";
+import { IonInput, LoadingController } from "@ionic/angular";
 import { AuthService } from "./auth.service";
 
 @Component({
@@ -9,7 +10,8 @@ import { AuthService } from "./auth.service";
   styleUrls: ["./auth.page.scss"],
 })
 export class AuthPage implements OnInit {
-  isLoading = false;
+  //isLoading = false;
+  isLogin = true;
 
   constructor(
     private authSer: AuthService,
@@ -20,18 +22,34 @@ export class AuthPage implements OnInit {
   ngOnInit() {}
 
   onLogin() {
-    this.isLoading = true;
+    //    this.isLoading = true;
     this.authSer.login();
     this.loadingCtrl
       .create({ keyboardClose: true, message: "Logging In...." })
       .then((loadingEl) => {
         loadingEl.present();
         setTimeout(() => {
-          this.isLoading = false;
+          // this.isLoading = false;
           loadingEl.dismiss();
           this.router.navigateByUrl("/places/tabs/discover");
         }, 2000);
       });
     console.log(this.authSer.isUserAuthenticated);
+  }
+
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      return;
+    }
+    if (this.isLogin) {
+      //send the request to login server
+    } else {
+      //send the request to sign up server
+    }
+    console.log(form.value.email, form.value.password);
+  }
+
+  onSwitchMode() {
+    this.isLogin = !this.isLogin;
   }
 }

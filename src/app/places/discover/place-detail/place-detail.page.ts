@@ -68,7 +68,7 @@ export class PlaceDetailPage implements OnInit {
       .create({
         component: CreateBookingComponent,
         componentProps: { selectedPlace: this.place, selectedMode: mode },
-        id: "placeBooking",
+        id: "bookingForm",
       })
       .then((modalEl) => {
         modalEl.present();

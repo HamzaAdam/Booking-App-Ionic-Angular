@@ -23,6 +23,12 @@ export class DiscoverPage implements OnInit {
     console.log(this.loadedPlaces);
   }
 
+  // ionViewWillEnter() {
+  //   this.loadedPlaces = this.placesService.places;
+  //   this.listedLoadedPlaces = this.loadedPlaces.slice(1);
+  //   console.log("ion view of discover page");
+  // }
+
   segmentChanged(event) {
     console.log(event.detail);
   }

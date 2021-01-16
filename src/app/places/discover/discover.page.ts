@@ -1,9 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { MenuController } from "@ionic/angular";
+import { SegmentChangeEventDetail } from "@ionic/core";
 import { Subscription } from "rxjs";
 
 import { PlacesService } from "../places.service";
 import { Place } from "../place.model";
+import { AuthService } from "src/app/auth/auth.service";
 
 @Component({
   selector: "app-discover",
@@ -12,20 +14,21 @@ import { Place } from "../place.model";
 })
 export class DiscoverPage implements OnInit, OnDestroy {
   loadedPlaces: Place[];
-  listedLoadedPlaces: Place[];
+  relevantPlaces: Place[];
   private placesSubscription: Subscription;
 
   constructor(
     private placesService: PlacesService,
-    private menuCtrl: MenuController
+    private menuCtrl: MenuController,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.placesSubscription = this.placesService.places.subscribe((places) => {
       this.loadedPlaces = places;
-      this.listedLoadedPlaces = this.loadedPlaces.slice(1);
+      this.relevantPlaces = this.loadedPlaces;
     });
-    console.log(this.loadedPlaces);
+    console.log("discover Page Console, loaded places =>", this.loadedPlaces);
   }
 
   ngOnDestroy() {
@@ -34,17 +37,31 @@ export class DiscoverPage implements OnInit, OnDestroy {
     }
   }
 
+  onFilterUpdate(event: CustomEvent<SegmentChangeEventDetail>) {
+    console.log("discoverPage, segment change function ", event.detail);
+    if (event.detail.value === "All") {
+      this.relevantPlaces = this.loadedPlaces;
+    } else {
+      this.relevantPlaces = this.loadedPlaces.filter((places) => {
+        return places.userId !== this.authService.userId;
+      });
+    }
+  }
+
+  onOpenMenu() {
+    this.menuCtrl.toggle("first");
+  }
   // ionViewWillEnter() {
   //   this.loadedPlaces = this.placesService.places;
   //   this.listedLoadedPlaces = this.loadedPlaces.slice(1);
   //   console.log("ion view of discover page");
   // }
 
-  segmentChanged(event) {
-    console.log("discover page console", event.detail);
-  }
-
-  onOpenMenu() {
-    this.menuCtrl.toggle("first");
-  }
+  //this is another method for filtering but there are some bugs
+  // onFilterUpdate(filter) {
+  //   this.relevantPlaces = this.loadedPlaces.filter(
+  //     (place) => filter === "All" || place.userId !== this.authService.userId
+  //   );
+  //   this.filter = filter;
+  // }
 }

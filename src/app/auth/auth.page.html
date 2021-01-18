@@ -67,8 +67,8 @@
             color="primary"
             expand="block"
             (click)="onLogin()"
+            [disabled]="F.invalid"
           >
-            <!-- [disabled]="F.invalid" -->
             Login
           </ion-button>
         </ion-col>

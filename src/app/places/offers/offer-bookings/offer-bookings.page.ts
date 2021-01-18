@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { ActivatedRoute, Router } from "@angular/router";
+import { AlertController, NavController } from "@ionic/angular";
 import { Subscription } from "rxjs";
 import { Place } from "../../place.model";
 import { PlacesService } from "../../places.service";
@@ -12,12 +12,15 @@ import { PlacesService } from "../../places.service";
 })
 export class OfferBookingsPage implements OnInit, OnDestroy {
   place: Place;
+  placeId: string;
   private placesSubcription: Subscription;
 
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    private placesService: PlacesService
+    private placesService: PlacesService,
+    private alertCtrl: AlertController,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -26,11 +29,32 @@ export class OfferBookingsPage implements OnInit, OnDestroy {
         this.navCtrl.navigateBack(["/", "places", "tabs", "offers"]);
         return;
       }
+      this.placeId = param.get("placeId");
       this.placesSubcription = this.placesService
         .getplace(param.get("placeId"))
-        .subscribe((place) => {
-          this.place = place;
-        });
+        .subscribe(
+          (place) => {
+            this.place = place;
+          },
+          (error) => {
+            this.alertCtrl
+              .create({
+                header: "An error occurred",
+                message: "please come back later",
+                buttons: [
+                  {
+                    text: "okay",
+                    handler: () => {
+                      this.router.navigate(["/places/tabs/offers"]);
+                    },
+                  },
+                ],
+              })
+              .then((alertEl) => {
+                alertEl.present();
+              });
+          }
+        );
     });
   }
 

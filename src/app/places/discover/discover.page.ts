@@ -15,6 +15,7 @@ import { AuthService } from "src/app/auth/auth.service";
 export class DiscoverPage implements OnInit, OnDestroy {
   loadedPlaces: Place[];
   relevantPlaces: Place[];
+  loadingSpinner = false;
   private placesSubscription: Subscription;
 
   constructor(
@@ -31,6 +32,13 @@ export class DiscoverPage implements OnInit, OnDestroy {
     console.log("discover Page Console, loaded places =>", this.loadedPlaces);
   }
 
+  ionViewWillEnter() {
+    this.loadingSpinner = true;
+    this.placesService.fetchPlaces().subscribe(() => {
+      this.loadingSpinner = false;
+    });
+  }
+
   ngOnDestroy() {
     if (this.placesSubscription) {
       this.placesSubscription.unsubscribe();
@@ -43,7 +51,7 @@ export class DiscoverPage implements OnInit, OnDestroy {
       this.relevantPlaces = this.loadedPlaces;
     } else {
       this.relevantPlaces = this.loadedPlaces.filter((places) => {
-        return places.userId !== this.authService.userId;
+        return places.userId === this.authService.userId;
       });
     }
   }

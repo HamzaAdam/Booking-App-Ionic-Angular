@@ -2,11 +2,14 @@ import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import {
   ActionSheetController,
+  AlertController,
   LoadingController,
   ModalController,
   NavController,
 } from "@ionic/angular";
+
 import { Subscription } from "rxjs";
+
 import { AuthService } from "src/app/auth/auth.service";
 import { BookingService } from "src/app/bookings/booking.service";
 import { CreateBookingComponent } from "src/app/bookings/create-booking/create-booking.component";
@@ -20,6 +23,7 @@ import { PlacesService } from "../../places.service";
 })
 export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
+  loadingSpinner = true;
   isBookable = false;
   private placesSubscription: Subscription;
 
@@ -31,10 +35,13 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private actionSheetCtrl: ActionSheetController,
     private bookingService: BookingService,
     private loadingCtrl: LoadingController,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private alertCtrl: AlertController
   ) {}
 
   ngOnInit() {
+    this.loadingSpinner = true;
     console.log("place detail page");
     this.route.paramMap.subscribe((param) => {
       if (!param.has("placeId")) {
@@ -43,10 +50,31 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
       }
       this.placesSubscription = this.placeService
         .getplace(param.get("placeId"))
-        .subscribe((place) => {
-          this.place = place;
-          this.isBookable = place.userId !== this.authService.userId;
-        });
+        .subscribe(
+          (place) => {
+            this.place = place;
+            this.isBookable = place.userId === this.authService.userId;
+            this.loadingSpinner = false;
+          },
+          (error) => {
+            this.alertCtrl
+              .create({
+                header: "An error occurred",
+                message: "please come back later",
+                buttons: [
+                  {
+                    text: "okay",
+                    handler: () => {
+                      this.router.navigate(["/places/tabs/discover"]);
+                    },
+                  },
+                ],
+              })
+              .then((alertEl) => {
+                alertEl.present();
+              });
+          }
+        );
     });
   }
 

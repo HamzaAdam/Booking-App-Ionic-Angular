@@ -69,9 +69,16 @@
           </ion-item>
         </ion-col>
       </ion-row>
-      <ion-row>
+      <!-- <ion-row>
         <ion-col size-sm="6" offset-sm="3">
           <app-location-picker></app-location-picker>
+        </ion-col>
+      </ion-row> -->
+      <ion-row>
+        <ion-col size-sm="6" offset-sm="3">
+          <app-image-picker
+            (imagepick)="onImagePicked($event)"
+          ></app-image-picker>
         </ion-col>
       </ion-row>
     </ion-grid>
